@@ -1,0 +1,42 @@
+rules:
+  - id: ai.hallucinated-safety.guard-without-enforcement
+    message: >
+      Hallucinated safety check detected: a guard condition exists but does not
+      alter control flow. This check gives a false sense of safety and is common
+      in AI-generated code.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+    metadata:
+      category: ai-generated-code
+      subcategory: hallucinated-safety
+      confidence: high
+      rationale: >
+        AI-generated code often adds validation checks that log or comment on
+        invalid state but do not prevent execution. This creates false confidence.
+    patterns:
+      - pattern: |
+          if ($COND) {
+            $BODY;
+          }
+      - pattern-not: |
+          if ($COND) {
+            $BODY;
+            return;
+          }
+      - pattern-not: |
+          if ($COND) {
+            $BODY;
+            throw $ERR;
+          }
+      - pattern-not: |
+          if ($COND) {
+            $BODY;
+            break;
+          }
+      - pattern-not: |
+          if ($COND) {
+            $BODY;
+            continue;
+          }
