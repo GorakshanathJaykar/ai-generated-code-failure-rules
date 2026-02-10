@@ -1,0 +1,43 @@
+rules:
+  - id: ai.hallucinated-safety.swallowed-exception
+    message: >
+      Hallucinated safety detected: exception is caught but not enforced.
+      The catch block does not alter control flow (no throw, return, or fail),
+      leading to silent failure and false confidence.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+    metadata:
+      category: ai-generated-code
+      subcategory: hallucinated-safety
+      confidence: high
+      rationale: >
+        AI-generated code frequently adds try/catch blocks that only log
+        or comment on errors without enforcing failure semantics.
+        This creates silent error paths and unsafe continuation.
+    patterns:
+      - pattern: |
+          try {
+            $TRY_BODY
+          } catch ($ERR) {
+            $CATCH_BODY
+          }
+      - pattern-not: |
+          try {
+            $TRY_BODY
+          } catch ($ERR) {
+            throw $ERR;
+          }
+      - pattern-not: |
+          try {
+            $TRY_BODY
+          } catch ($ERR) {
+            return $RET;
+          }
+      - pattern-not: |
+          try {
+            $TRY_BODY
+          } catch ($ERR) {
+            process.exit($CODE);
+          }
