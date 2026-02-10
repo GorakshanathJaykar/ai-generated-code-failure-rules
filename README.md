@@ -40,3 +40,14 @@ patterns, but the framework itself is tool-agnostic.
 ## Status
 
 This is the initial public release of the framework.
+
+## Community Contributions
+
+This project is intentionally open.
+
+If you have observed failure modes that occur disproportionately
+in AI-generated or AI-assisted code, we welcome contributions in
+the form of rules, examples, or documentation.
+
+Please read `CONTRIBUTING.md` before submitting a pull request to
+ensure alignment with the framework.
