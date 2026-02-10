@@ -35,3 +35,13 @@ altering control flow leads to silent corruption and unsafe continuation.
 
 This rule flags catch blocks that do not throw, return, or otherwise
 terminate execution.
+
+### Relation to existing tools
+
+Similar patterns may be flagged by linters or SAST tools as
+"ignored exceptions" or "empty catch blocks".
+
+This rule differs in intent: it classifies swallowed exceptions
+as a form of *hallucinated safety*, where failure is acknowledged
+but not enforced, leading to false confidence at the system level.
+
