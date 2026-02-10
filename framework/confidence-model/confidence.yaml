@@ -1,0 +1,69 @@
+version: 1.0
+
+baseline:
+  score: 100
+
+categories:
+  hallucinated-safety:
+    description: >
+      Hallucinated Safety represents trust failures where safety constructs
+      appear to exist but do not enforce failure semantics.
+
+    severity_tiers:
+      critical:
+        base_penalty: 20
+        description: >
+          Safety construct is entirely ineffective in a critical execution path.
+      high:
+        base_penalty: 12
+        description: >
+          Safety construct exists but does not alter control flow.
+      medium:
+        base_penalty: 6
+        description: >
+          Partial enforcement with unsafe fallback behavior.
+      low:
+        base_penalty: 2
+        description: >
+          Cosmetic or superficial safety construct with limited impact.
+
+    context_multipliers:
+      execution_criticality:
+        auth:
+          multiplier: 1.5
+        payment:
+          multiplier: 1.5
+        persistence:
+          multiplier: 1.5
+        external_boundary:
+          multiplier: 1.3
+        internal_logic:
+          multiplier: 1.0
+        non_critical:
+          multiplier: 0.7
+
+      failure_propagation:
+        swallowed_after_state_mutation:
+          multiplier: 1.5
+        swallowed_state_unclear:
+          multiplier: 1.3
+        logged_only:
+          multiplier: 1.1
+        unsafe_fallback:
+          multiplier: 1.2
+
+    repetition_decay:
+      first_occurrence: 1.0
+      second_occurrence: 0.5
+      subsequent_occurrences: 0.25
+
+    confidence_caps:
+      any_critical_violation:
+        max_confidence: 70
+      multiple_high_violations:
+        threshold: 2
+        max_confidence: 75
+      violation_in_auth_or_payment:
+        max_confidence: 65
+      violation_in_error_handling_layer:
+        max_confidence: 60
